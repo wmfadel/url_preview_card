@@ -121,6 +121,9 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
 
   void _getUrlData() async {
     final _pref = await SharedPreferences.getInstance();
+
+    if (!this.mounted) return;
+
     if (!isURL(widget.url)) {
       setState(() {
         _urlPreviewData = null;
@@ -137,11 +140,9 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
     }
 
     var response = await get(widget.url);
-    if (response.statusCode != 200) {
-      if (!this.mounted) {
-        return;
-      }
+    if (!this.mounted) return;
 
+    if (response.statusCode != 200) {
       setState(() {
         _urlPreviewData = null;
       });
@@ -153,10 +154,6 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
     _extractOGData(document, data, 'og:description');
     _extractOGData(document, data, 'og:site_name');
     _extractOGData(document, data, 'og:image');
-
-    if (!this.mounted) {
-      return;
-    }
 
     if (data != null && data.isNotEmpty) {
       _pref.setString(widget.url, jsonEncode(data));
