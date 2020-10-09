@@ -1,6 +1,6 @@
 # example
 
-Simple Url Preview Example
+Url Preview Card Example
 
 ## Getting Started
 

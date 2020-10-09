@@ -11,23 +11,17 @@ class PreviewImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_image != null) {
-      return Padding(
-        padding: EdgeInsets.all(10),
-        child: CachedNetworkImage(
-          imageUrl: _image,
-          fit: BoxFit.cover,
-          height: (MediaQuery.of(context).size.width -
-                  MediaQuery.of(context).padding.top -
-                  MediaQuery.of(context).padding.bottom) *
-              0.25,
-          errorWidget: (context, url, error) => Icon(
-            Icons.error,
-            color: _imageLoaderColor,
-          ),
-          progressIndicatorBuilder: (context, url, downloadProgress) => Icon(
-            Icons.more_horiz,
-            color: _imageLoaderColor,
-          ),
+      return CachedNetworkImage(
+        imageUrl: _image,
+        fit: BoxFit.cover,
+        height: double.infinity,
+        errorWidget: (context, url, error) => Icon(
+          Icons.error,
+          color: _imageLoaderColor,
+        ),
+        progressIndicatorBuilder: (context, url, downloadProgress) => Icon(
+          Icons.more_horiz,
+          color: _imageLoaderColor,
         ),
       );
     } else {
