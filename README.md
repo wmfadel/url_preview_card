@@ -18,7 +18,7 @@ Add url_preview_card to pubspec.yaml, and hit command 'flutter pub get'
 ```yaml
 dependencies:
   ...
-  url_preview_card: ^0.1.0
+  url_preview_card: ^0.1.1
 ```
 
 #### 1) **Simple use:**
