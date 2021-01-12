@@ -165,12 +165,19 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
   }
 
   void _extractOGData(Document document, Map data, String parameter) {
-    var titleMetaTag = document.getElementsByTagName("meta")?.firstWhere(
-        (meta) => meta.attributes['property'] == parameter,
-        orElse: () => null);
-    if (titleMetaTag != null) {
-      data[parameter] = titleMetaTag.attributes['content'];
-    }
+    final metaTags = document.getElementsByTagName("meta");
+
+    if (metaTags == null) return;
+
+    // we search for og tag regardless of the attribute name
+    final metaTag = metaTags.firstWhere(
+      (element) => element.attributes.containsValue(parameter),
+      orElse: () => null,
+    );
+
+    if (metaTag == null) return;
+
+    data[parameter] = metaTag.attributes['content'];
   }
 
   void _launchURL() async {
