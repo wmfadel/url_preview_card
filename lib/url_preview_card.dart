@@ -71,12 +71,7 @@ class UrlPreviewCard extends StatefulWidget {
     this.imageLoaderColor,
     this.previewContainerPadding,
     this.onTap,
-  })  : assert(previewHeight >= 130.0,
-            'The preview height should be greater than or equal to 130'),
-        assert(titleLines <= 2 && titleLines > 0,
-            'The title lines should be less than or equal to 2 and not equal to 0'),
-        assert(descriptionLines <= 3 && descriptionLines > 0,
-            'The description lines should be less than or equal to 3 and not equal to 0');
+  });
 
   @override
   _UrlPreviewCardState createState() => _UrlPreviewCardState();
@@ -218,7 +213,7 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
         children: [
           ClipRRect(
             child: Container(
-              width: widget.previewHeight - 30,
+              width: widget.previewHeight,
               height: widget.previewHeight,
               child: PreviewImage(
                 _urlPreviewData['og:image'],
@@ -234,7 +229,6 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   PreviewTitle(
@@ -242,10 +236,12 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
                     _titleStyle,
                     _titleLines,
                   ),
-                  PreviewDescription(
-                    _urlPreviewData['og:description'],
-                    _descriptionStyle,
-                    _descriptionLines,
+                  Expanded(
+                    child: PreviewDescription(
+                      _urlPreviewData['og:description'],
+                      _descriptionStyle,
+                      _descriptionLines,
+                    ),
                   ),
                   PreviewSiteName(
                     _urlPreviewData['og:site_name'],
