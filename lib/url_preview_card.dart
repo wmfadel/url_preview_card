@@ -17,7 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// Provides URL preview
 class UrlPreviewCard extends StatefulWidget {
   /// URL for which preview is to be shown
-  final String url;
+  final String? url;
 
   /// Height of the preview
   final double previewHeight;
@@ -41,13 +41,13 @@ class UrlPreviewCard extends StatefulWidget {
   final int descriptionLines;
 
   /// Color for loader icon shown, till image loads
-  final Color imageLoaderColor;
+  final Color? imageLoaderColor;
 
   /// Container padding
-  final EdgeInsetsGeometry previewContainerPadding;
+  final EdgeInsetsGeometry? previewContainerPadding;
 
   /// onTap URL preview, by default opens URL in default browser
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   UrlPreviewCard({
     @required this.url,
@@ -78,18 +78,18 @@ class UrlPreviewCard extends StatefulWidget {
 }
 
 class _UrlPreviewCardState extends State<UrlPreviewCard> {
-  Map _urlPreviewData;
-  bool _isVisible = true;
-  TextStyle _titleStyle;
-  TextStyle _descriptionStyle;
-  TextStyle _siteNameStyle;
-  double _previewHeight;
-  Color _bgColor;
-  int _titleLines;
-  int _descriptionLines;
-  Color _imageLoaderColor;
-  EdgeInsetsGeometry _previewContainerPadding;
-  VoidCallback _onTap;
+  Map? _urlPreviewData;
+  bool? _isVisible = true;
+  TextStyle? _titleStyle;
+  TextStyle? _descriptionStyle;
+  TextStyle? _siteNameStyle;
+  double? _previewHeight;
+  Color? _bgColor;
+  int? _titleLines;
+  int? _descriptionLines;
+  Color? _imageLoaderColor;
+  EdgeInsetsGeometry? _previewContainerPadding;
+  VoidCallback? _onTap;
 
   @override
   void initState() {
@@ -119,14 +119,14 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
 
     if (!this.mounted) return;
 
-    if (!isURL(widget.url)) {
+    if (!isURL(widget.url!)) {
       setState(() {
         _urlPreviewData = null;
       });
       return;
     }
 
-    final cachedData = _pref.getString(widget.url);
+    final cachedData = _pref.getString(widget.url!);
     if (cachedData != null) {
       setState(() {
         _urlPreviewData = jsonDecode(cachedData);
@@ -134,7 +134,7 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
       });
     }
 
-    var response = await get(Uri.parse(widget.url));
+    var response = await get(Uri.parse(widget.url!));
     if (!this.mounted) return;
 
     if (response.statusCode != 200) {
@@ -151,7 +151,7 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
     _extractOGData(document, data, 'og:image');
 
     if (data != null && data.isNotEmpty) {
-      _pref.setString(widget.url, jsonEncode(data));
+      _pref.setString(widget.url!, jsonEncode(data));
       setState(() {
         _urlPreviewData = data;
         _isVisible = true;
@@ -167,17 +167,14 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
     // we search for og tag regardless of the attribute name
     final metaTag = metaTags.firstWhere(
       (element) => element.attributes.containsValue(parameter),
-      orElse: () => null,
     );
-
-    if (metaTag == null) return;
 
     data[parameter] = metaTag.attributes['content'];
   }
 
   void _launchURL() async {
-    if (await canLaunch(Uri.encodeFull(widget.url))) {
-      await launch(Uri.encodeFull(widget.url));
+    if (await canLaunch(Uri.encodeFull(widget.url!))) {
+      await launch(Uri.encodeFull(widget.url!));
     } else {
       throw 'Could not launch ${widget.url}';
     }
@@ -190,7 +187,7 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
         widget.imageLoaderColor ?? Theme.of(context).accentColor;
     _initialize();
 
-    if (_urlPreviewData == null || !_isVisible) {
+    if (_urlPreviewData == null || !_isVisible!) {
       return SizedBox();
     }
 
@@ -216,8 +213,8 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
               width: widget.previewHeight,
               height: widget.previewHeight,
               child: PreviewImage(
-                _urlPreviewData['og:image'],
-                _imageLoaderColor,
+                _urlPreviewData!['og:image'],
+                _imageLoaderColor!,
               ),
             ),
             borderRadius: BorderRadius.only(
@@ -232,20 +229,20 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   PreviewTitle(
-                    _urlPreviewData['og:title'],
-                    _titleStyle,
-                    _titleLines,
+                    _urlPreviewData!['og:title'],
+                    _titleStyle!,
+                    _titleLines!,
                   ),
                   Expanded(
                     child: PreviewDescription(
-                      _urlPreviewData['og:description'],
-                      _descriptionStyle,
-                      _descriptionLines,
+                      _urlPreviewData!['og:description'],
+                      _descriptionStyle!,
+                      _descriptionLines!,
                     ),
                   ),
                   PreviewSiteName(
-                    _urlPreviewData['og:site_name'],
-                    _siteNameStyle,
+                    _urlPreviewData!['og:site_name'],
+                    _siteNameStyle!,
                   ),
                 ],
               ),
