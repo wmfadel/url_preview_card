@@ -32,7 +32,7 @@ class UrlPreviewCard extends StatefulWidget {
   final TextStyle siteNameStyle;
 
   /// Background color
-  final Color bgColor;
+  final Color? bgColor;
 
   /// Number of lines for Title. (Max possible lines = 2)
   final int titleLines;
@@ -150,7 +150,7 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
     _extractOGData(document, data, 'og:site_name');
     _extractOGData(document, data, 'og:image');
 
-    if (data != null && data.isNotEmpty) {
+    if (data.isNotEmpty) {
       _pref.setString(widget.url!, jsonEncode(data));
       setState(() {
         _urlPreviewData = data;
@@ -161,8 +161,6 @@ class _UrlPreviewCardState extends State<UrlPreviewCard> {
 
   void _extractOGData(Document document, Map data, String parameter) {
     final metaTags = document.getElementsByTagName("meta");
-
-    if (metaTags == null) return;
 
     // we search for og tag regardless of the attribute name
     final metaTag = metaTags.firstWhere(

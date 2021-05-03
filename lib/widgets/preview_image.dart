@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Shows image of URL
 class PreviewImage extends StatelessWidget {
-  final String _image;
+  final String? _image;
   final Color _imageLoaderColor;
 
   PreviewImage(this._image, this._imageLoaderColor);
@@ -12,7 +12,7 @@ class PreviewImage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (_image != null) {
       return CachedNetworkImage(
-        imageUrl: _image,
+        imageUrl: _image!,
         fit: BoxFit.cover,
         height: double.infinity,
         errorWidget: (context, url, error) => Icon(
